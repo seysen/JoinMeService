@@ -2,20 +2,25 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val projectVersion: String by project
 val groupName: String by project
-
 val targetJvm: String by project
 val springBootVersion: String by project
 val kotlinVersion: String by project
 val jacksonVersion: String by project
-
 val postgresqlVersion: String by project
 val flywaydbVersion: String by project
-
 val detektVersion: String by project
-
 val kotestVersion: String by project
-
-val testcontainersVersion = "1.16.0"
+val testcontainersVersion: String by project
+val mapstruct: String by project
+val mapstructProcessor: String by project
+val slf4jVersion: String by project
+val logbackVersion: String by project
+val apacheCommonLangVersion: String by project
+val mockkVersion: String by project
+val springmockkVersion: String by project
+val springCloudSleuth: String by project
+val kaptVersion: String by project
+val mapStructVersion: String by project
 
 plugins {
     id("org.springframework.boot")
@@ -25,6 +30,7 @@ plugins {
     kotlin("plugin.jpa")
     kotlin("plugin.allopen")
     id("io.gitlab.arturbosch.detekt")
+    kotlin("kapt")
 }
 
 group = groupName
@@ -56,6 +62,7 @@ dependencies {
     // flyway
     compileOnly("org.flywaydb:$flywaydbVersion")
 
+    // detekt
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion")
 
@@ -65,8 +72,26 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersVersion")
 
-    // Kotest
+    // testing
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+    implementation("io.kotest:kotest-framework-engine:$kotestVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
+
+    // mapstruct
+    implementation("org.mapstruct:mapstruct:$mapStructVersion")
+    kapt("org.mapstruct:mapstruct-processor:$mapStructVersion")
+
+    // logging
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
+    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+    // utils
+    implementation("org.apache.commons:commons-lang3:$apacheCommonLangVersion")
+
+    // tracing
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth:$springCloudSleuth")
 }
 
 apply(from = "detekt.gradle")

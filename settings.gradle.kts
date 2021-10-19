@@ -5,6 +5,7 @@ pluginManagement {
     val springJpaVersion: String by settings
     val allOpenVersion: String by settings
     val detektVersion: String by settings
+    val kaptVersion: String by settings
 
     plugins {
         id("org.springframework.boot") version springBootVersion
@@ -14,7 +15,8 @@ pluginManagement {
         kotlin("plugin.jpa") version springJpaVersion
         kotlin("plugin.allopen") version allOpenVersion
         id("io.gitlab.arturbosch.detekt") version detektVersion
-    }
+        kotlin("kapt") version kaptVersion
+     }
 }
 
 rootProject.name = "CoreService"
