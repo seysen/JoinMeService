@@ -8,7 +8,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
 
-class InitServiceControllerTest(@Autowired override val testRest: TestRestTemplate) : AbstractTestClass(testRest) {
+class InitServiceControllerTest(@Autowired val testRest: TestRestTemplate) : AbstractTestClass() {
 
     @Test
     fun coreServiceControllerTest() {

@@ -1,8 +1,6 @@
 package com.dataart.coreservice
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
@@ -15,9 +13,7 @@ import org.testcontainers.utility.DockerImageName
     classes = [CoreServiceApplication::class]
 )
 @Testcontainers
-abstract class AbstractTestClass(
-    @Autowired val testRest: TestRestTemplate
-) {
+abstract class AbstractTestClass {
 
     companion object {
         @Container

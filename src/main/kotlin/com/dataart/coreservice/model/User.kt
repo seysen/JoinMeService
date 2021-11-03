@@ -32,7 +32,7 @@ data class User(
     @Column(nullable = false)
     var password: String,
 
-    var linkAva: String? = null
+    var linkAva: String,
 ) {
 
     @Id

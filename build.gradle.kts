@@ -15,17 +15,7 @@ val detektVersion: String by project
 
 val kotestVersion: String by project
 
-val testcontainersVersion: String by project
-
-val mapStructVersion: String by project
-val mockkVersion: String by project
-val springSecurityConfigVersion: String by project
-val springStarterConfigVersion: String by project
-val jjwtVersion: String by project
-val springSecurityJwtVersion: String by project
-val assuredTestVersion: String by project
-val springmockkVersion: String by project
-
+val testcontainersVersion = "1.16.0"
 
 plugins {
     id("org.springframework.boot")
@@ -35,7 +25,6 @@ plugins {
     kotlin("plugin.jpa")
     kotlin("plugin.allopen")
     id("io.gitlab.arturbosch.detekt")
-    kotlin("kapt") version "1.5.31"
 }
 
 group = groupName
@@ -76,21 +65,8 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersVersion")
 
-    //Spring Security
-    implementation("org.springframework.security:spring-security-config:$springSecurityConfigVersion")
-    implementation("org.springframework.boot:spring-boot-starter-security:$springStarterConfigVersion")
-    implementation("io.jsonwebtoken:jjwt:$jjwtVersion")
-    implementation("org.springframework.security:spring-security-jwt:$springSecurityJwtVersion")
-
-    //Test
-    testImplementation("io.rest-assured:rest-assured:$assuredTestVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
+    // Kotest
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-
-    // mapstruct
-    implementation("org.mapstruct:mapstruct:$mapStructVersion")
-    kapt("org.mapstruct:mapstruct-processor:$mapStructVersion")
 }
 
 apply(from = "detekt.gradle")
