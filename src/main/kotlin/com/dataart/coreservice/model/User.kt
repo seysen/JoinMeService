@@ -66,4 +66,5 @@ data class User(
 
     @LastModifiedDate
     var updatedDt: Instant = Instant.now()
+
 }
