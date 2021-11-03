@@ -26,27 +26,4 @@ data class EventDto(
     @JsonProperty("creator_id")
     var creatorId: Long? = null
 
-) {
-
-//    fun desc(): String =
-//        "EventDto (name = $name; description = ${description.take(15)}; " +
-//        "linkAva = $linkAva; createdDt = $createdDt; updatedDt = $updatedDt; " +
-//        "categories = $categories; creatorId = $creatorId)"
-
-    fun desc(): String =
-        this.javaClass.declaredFields.joinToString(";") {
-            it.also {
-                it.isAccessible = true
-            }
-            "${it.name} = ${it.get(this)?.let{
-                it.toString().take(15)
-            }}"
-        }
-
-    // без this выбрасывает ошибку про transient value null в event
-    // без {it.get(this) просто печатает тип поля
-    // без проверки на ноль выбрасывает null pointer ex
-    // без  it.isAccessible = true выбрасывает ошибку нет доступа
-
-
-}
+) : BaseDto()

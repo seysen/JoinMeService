@@ -1,24 +1,25 @@
 package com.dataart.coreservice
 
-import com.dataart.coreservice.services.EventService
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.core.spec.style.FreeSpec
+import io.restassured.builder.RequestSpecBuilder
+import io.restassured.http.ContentType
+import io.restassured.specification.RequestSpecification
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
+import org.springframework.boot.test.util.TestPropertyValues
+import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.context.ApplicationContextInitializer
+import org.springframework.context.ConfigurableApplicationContext
+import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.utility.DockerImageName
 
 @SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = [CoreServiceApplication::class]
-)
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-abstract class AbstractTestClass(
-    @Autowired val testRest: TestRestTemplate
-) {
+@ContextConfiguration(initializers = [AbstractTestClass.Initializer::class])
+abstract class AbstractTestClass : FreeSpec() {
 
     companion object {
         @Container
@@ -30,12 +31,24 @@ abstract class AbstractTestClass(
                 withInitScript("db/migration/V1__init.sql")
             }
 
-        @JvmStatic
-        @DynamicPropertySource
-        fun datasourceConfig(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.url", container::getJdbcUrl)
-            registry.add("spring.datasource.password", container::getPassword)
-            registry.add("spring.datasource.username", container::getUsername)
+        var requestSpecification: RequestSpecification = RequestSpecBuilder().setContentType(ContentType.JSON)
+            .build() // здесь указать порт не получается тк в этот момент он равен нулю и приобретает значение в тесте
+    }
+
+    internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+        override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
+            container.start()
+
+            TestPropertyValues.of(
+                "spring.datasource.url=${container.jdbcUrl}",
+                "spring.datasource.password=${container.password}",
+                "spring.datasource.username=${container.username}",
+            ).applyTo(configurableApplicationContext.environment)
         }
     }
+
+    @LocalServerPort
+    var port = 0
+
+
 }

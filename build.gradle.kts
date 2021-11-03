@@ -21,6 +21,10 @@ val springmockkVersion: String by project
 val springCloudSleuth: String by project
 val kaptVersion: String by project
 val mapStructVersion: String by project
+val restAssuredVersion: String by project
+val kotlinxCoroutinesTest: String by project
+val kotestExtensionsSpring: String by project
+val kotestExtensionsTestcontainersJvm: String by project
 
 plugins {
     id("org.springframework.boot")
@@ -74,9 +78,14 @@ dependencies {
 
     // testing
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-    implementation("io.kotest:kotest-framework-engine:$kotestVersion")
+    testImplementation("io.kotest:kotest-framework-engine:$kotestVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
+    testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+    testImplementation("io.rest-assured:kotlin-extensions:$restAssuredVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesTest") // для Free Spec
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion") // не видит тесты free spec без этой зависимости
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtensionsSpring") //  для DI
 
     // mapstruct
     implementation("org.mapstruct:mapstruct:$mapStructVersion")
@@ -104,7 +113,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+   useJUnitPlatform()
 }
 
 allOpen {
