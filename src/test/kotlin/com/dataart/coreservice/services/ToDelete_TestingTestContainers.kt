@@ -6,8 +6,12 @@ import com.dataart.coreservice.repository.UserRepository
 import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.web.client.TestRestTemplate
 
-class ToDelete_TestingTestContainers(@Autowired private val userRepository: UserRepository) : AbstractTestClass() {
+class ToDelete_TestingTestContainers(
+    @Autowired private val userRepository: UserRepository,
+    @Autowired testRest: TestRestTemplate
+) : AbstractTestClass(testRest) {
 
     @Test
     fun `Verify that testcontainers work`() =
