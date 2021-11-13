@@ -25,7 +25,7 @@ interface EventMapper {
 
     // target  поле в сущносте- результате
 
-        @Mappings( // указать все поля которые есть в event dto
+        @Mappings( // указать все поля которые есть в event dto + все из эвент
         Mapping(target = "name", source = "eventDto.name"),
         Mapping(target = "linkAva", source = "eventDto.linkAva"),
         Mapping(target = "description", source = "eventDto.description"),
@@ -33,6 +33,10 @@ interface EventMapper {
         Mapping(target = "categories", ignore = true),
         Mapping(target = "updatedDt", ignore = true),
         Mapping(target = "createdDt", ignore = true),
+        Mapping(target = "id", ignore = true),
+        Mapping(target = "likeEvents", ignore = true),
+        Mapping(target = "messages", ignore = true),
+        Mapping(target = "photos", ignore = true),
         )
         fun convertEventDtoRequestToEvent(eventDto: EventDto, user: User): Event
 }

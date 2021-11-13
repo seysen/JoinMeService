@@ -30,7 +30,7 @@ class EventService(
                   }
           }
           .let {
-                eventRepository.save(eventMapper.convertEventDtoRequestToEvent(eventRequest, it))
+              eventRepository.save(eventMapper.convertEventDtoRequestToEvent(eventRequest, it))
           }
           .let {
                 logger.info("service: event added {}", it.toString() )

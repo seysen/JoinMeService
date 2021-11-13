@@ -7,18 +7,21 @@ import com.dataart.coreservice.model.User
 import com.dataart.coreservice.repository.EventRepository
 import com.dataart.coreservice.repository.UserRepository
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.restassured.module.kotlin.extensions.Extract
+import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.notNullValue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpStatus
 import org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils.randomAlphabetic
+import java.time.Instant
 
-class EventControllerTest(
+class EventControllerIT(
     @Autowired val eventRepository: EventRepository,
     @Autowired val userRepository: UserRepository,
-    @Autowired testRest: TestRestTemplate
-) : AbstractTestClass(testRest) {
+) : AbstractTestClass() {
 
     private val EVENT_URI = "/events/"
     private val text_value_length: Int = 21
@@ -49,15 +52,18 @@ class EventControllerTest(
             userId
         )
 
-        with(
-            testRest
-                .postForEntity(EVENT_URI, eventRequest, Long::class.java)
-        ) {
-            statusCode shouldBe HttpStatus.OK
-            body shouldNotBe null
-            body shouldBe expectedPostedEventId
+        Given {
+            spec(requestSpecification)
+            request().body(eventRequest).port(port)
+        } When {
+            post(EVENT_URI)
+        } Then {
+            statusCode(200)
+            body(notNullValue())
+            body(equalTo(expectedPostedEventId.toString()))
         }
     }
+    // негативные сценарии проверяются в сервисе
 
     @Test
     fun `Verify that GET by id endpoint works correctly`() {
@@ -83,16 +89,25 @@ class EventControllerTest(
         )
 
         var eventId: Long = event.id
+        var responseCreateddDt = ""
+        var responseUpdatedDt = ""
 
-        with(testRest.getForEntity(EVENT_URI + eventId, EventDto::class.java)) {
-            statusCode shouldBe HttpStatus.OK
-            body shouldNotBe null
-            body!!.name shouldBe event.name
-            body!!.description shouldBe event.description
-            body!!.linkAva shouldBe event.linkAva
-            (body!!.createdDt!!).epochSecond shouldBe event.createdDt.epochSecond
-            (body!!.updatedDt!!).epochSecond shouldBe event.updatedDt.epochSecond
-            body!!.categories shouldBe event.categories
+        Given {
+            spec(requestSpecification).port(port)
+        } When {
+            get(EVENT_URI + eventId)
+        } Then {
+            statusCode(200)
+            body(notNullValue())
+            body("description", equalTo(event.description))
+            body("link_ava", equalTo(event.linkAva))
+            body("category", equalTo(event.categories))
+        } Extract {
+            responseUpdatedDt = path("updated_dt")
+            responseCreateddDt = path("updated_dt")
         }
+
+        Instant.parse(responseCreateddDt).epochSecond shouldBe event.createdDt.epochSecond
+        Instant.parse(responseUpdatedDt).epochSecond shouldBe event.updatedDt.epochSecond
     }
 }
