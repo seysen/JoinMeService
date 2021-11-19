@@ -32,7 +32,7 @@ data class User(
     @Column(nullable = false)
     var password: String,
 
-    var linkAva: String,
+    var linkAva: String? = null,
 ) {
 
     @Id
@@ -66,5 +66,4 @@ data class User(
 
     @LastModifiedDate
     var updatedDt: Instant = Instant.now()
-
 }

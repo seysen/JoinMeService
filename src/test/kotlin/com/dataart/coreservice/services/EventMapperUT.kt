@@ -5,8 +5,6 @@ import com.dataart.coreservice.dto.EventDto
 import com.dataart.coreservice.mappers.EventMapper
 import com.dataart.coreservice.model.Category
 import com.dataart.coreservice.model.Event
-import com.dataart.coreservice.model.LikeEvent
-import com.dataart.coreservice.model.Photo
 import com.dataart.coreservice.model.User
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe

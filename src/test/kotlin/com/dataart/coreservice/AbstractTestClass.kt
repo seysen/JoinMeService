@@ -48,7 +48,5 @@ abstract class AbstractTestClass : FreeSpec() {
     }
 
     @LocalServerPort
-    var port = 0
-
-
+    var port = 8080
 }
