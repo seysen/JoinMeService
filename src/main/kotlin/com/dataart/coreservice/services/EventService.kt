@@ -33,7 +33,7 @@ class EventService(
               eventRepository.save(eventMapper.convertEventDtoRequestToEvent(eventRequest, it))
           }
           .let {
-                logger.info("service: event added {}", it.toString() )
+                logger.info("service: event added {}", it.toString())
                 it.id
           }
 

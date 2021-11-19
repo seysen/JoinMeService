@@ -25,6 +25,10 @@ val restAssuredVersion: String by project
 val kotlinxCoroutinesTest: String by project
 val kotestExtensionsSpring: String by project
 val kotestExtensionsTestcontainersJvm: String by project
+val springSecurityConfigVersion: String by project
+val springStarterConfigVersion: String by project
+val jjwtVersion: String by project
+val springSecurityJwtVersion: String by project
 
 plugins {
     id("org.springframework.boot")
@@ -101,6 +105,12 @@ dependencies {
 
     // tracing
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth:$springCloudSleuth")
+
+    //Spring Security
+    implementation("org.springframework.security:spring-security-config:$springSecurityConfigVersion")
+    implementation("org.springframework.boot:spring-boot-starter-security:$springStarterConfigVersion")
+    implementation("io.jsonwebtoken:jjwt:$jjwtVersion")
+    implementation("org.springframework.security:spring-security-jwt:$springSecurityJwtVersion")
 }
 
 apply(from = "detekt.gradle")

@@ -6,7 +6,7 @@ create table users
     created_dt timestamp   not null,
     email      varchar(30) not null,
     link_ava   varchar(3000),
-    password   varchar(30) not null,
+    password   varchar(255) not null,
     updated_dt timestamp,
     primary key (id)
 );
