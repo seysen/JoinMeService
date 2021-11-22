@@ -15,7 +15,8 @@ interface EventMapper {
         Mapping(target = "creatorId", ignore = true),
         Mapping(
             target = "categories",
-            expression = "java(event.getCategories().stream().map(c->c.getName()).collect(java.util.stream.Collectors.toList()))"
+            expression = "java(event.getCategories().stream()" +
+                    ".map(c->c.getName()).collect(java.util.stream.Collectors.toList()))"
         ))
     fun convertToEventDtoResponse(event: Event): EventDto
 

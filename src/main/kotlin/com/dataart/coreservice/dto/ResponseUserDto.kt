@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class ResponseUserDto (
+class ResponseUserDto(
     @JsonProperty("userid")
     var userId: String,
 

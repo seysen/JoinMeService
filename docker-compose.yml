@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   db:
-    image: postgres:latest
+    image: postgres:14.1
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -15,5 +15,9 @@ services:
     restart: always
     depends_on:
       - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/core_service
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345678
     ports:
       - "8080:8080"

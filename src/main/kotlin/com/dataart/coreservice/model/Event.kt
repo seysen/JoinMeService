@@ -60,7 +60,7 @@ data class Event(
     var likeEvents: MutableList<LikeEvent> = mutableListOf()
 
     @CreatedDate
-    @Column(nullable = false)
+    /*@Column(nullable = false)*/
     var createdDt: Instant = Instant.now()
 
     @LastModifiedDate
