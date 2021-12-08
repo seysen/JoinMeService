@@ -19,6 +19,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
 
+const val JWT_EXPIRATION_DAYS = 15L
+
 @Service
 class UserService(
     private val userRepository: UserRepository,
@@ -27,8 +29,6 @@ class UserService(
 ) {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
-
-    val jwtExpirationDays = 15L
 
     fun register(body: UserDto): ResponseUserDto {
         isRegisterDtoCorrect(body)
@@ -51,7 +51,7 @@ class UserService(
         return response
     }
 
-    private fun createUserByDto(body: UserDto) : User {
+    private fun createUserByDto(body: UserDto): User {
         val newUser = userMapper.toEntity(body)
         newUser.password = bCryptPasswordEncoder.encode(body.password)
         return newUser
@@ -63,7 +63,7 @@ class UserService(
 
     private fun isRegisterDtoCorrect(body: UserDto) {
         val userFromDb = userRepository.findByEmail(body.email)
-        if(userFromDb.isPresent) {
+        if (userFromDb.isPresent) {
             logger.info("User already exists {}", body.desc())
             throw UserAlreadyExistException(userFromDb.get().email)
         }
@@ -79,13 +79,13 @@ class UserService(
         }
     }
 
-    private fun createResponse(userId: String) : ResponseUserDto {
+    private fun createResponse(userId: String): ResponseUserDto {
         val jwt = Jwts.builder()
             .setIssuer(userId)
-            .setExpiration(Date.from(LocalDate.now().plusDays(jwtExpirationDays).atStartOfDay(ZoneId.systemDefault()).toInstant()))
+            .setExpiration(Date.from(LocalDate.now()
+                .plusDays(JWT_EXPIRATION_DAYS).atStartOfDay(ZoneId.systemDefault()).toInstant()))
             .signWith(SignatureAlgorithm.HS512, "secret").compact()
 
         return ResponseUserDto(userId, jwt)
-
     }
 }

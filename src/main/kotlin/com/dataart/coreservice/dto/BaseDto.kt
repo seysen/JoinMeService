@@ -1,4 +1,5 @@
 package com.dataart.coreservice.dto
+const val LENGTH = 15
 
 open class BaseDto {
 
@@ -9,7 +10,7 @@ open class BaseDto {
             }
             "${it.name} = ${
                 it.get(this)?.let {
-                    it.toString().take(15)
+                    it.toString().take(LENGTH)
                 }
             }"
         }
