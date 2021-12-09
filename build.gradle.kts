@@ -29,6 +29,8 @@ val springSecurityConfigVersion: String by project
 val springStarterConfigVersion: String by project
 val jjwtVersion: String by project
 val springSecurityJwtVersion: String by project
+val awsVersion: String by project
+val postgresqlTestContainersVersion: String by project
 
 plugins {
     id("org.springframework.boot")
@@ -39,6 +41,7 @@ plugins {
     kotlin("plugin.allopen")
     id("io.gitlab.arturbosch.detekt")
     kotlin("kapt")
+    id("org.flywaydb.flyway")
 }
 
 group = groupName
@@ -57,7 +60,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // SpringBoot
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
@@ -68,14 +70,14 @@ dependencies {
     runtimeOnly("org.postgresql:$postgresqlVersion")
 
     // flyway
-    compileOnly("org.flywaydb:$flywaydbVersion")
+    implementation("org.flywaydb:flyway-core:$flywaydbVersion")
 
     // detekt
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
     detekt("io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion")
 
     // Testcontainers
-    testImplementation("org.testcontainers:postgresql:1.16.0")
+    testImplementation("org.testcontainers:postgresql:$postgresqlTestContainersVersion")
     testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersVersion")
@@ -111,6 +113,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security:$springStarterConfigVersion")
     implementation("io.jsonwebtoken:jjwt:$jjwtVersion")
     implementation("org.springframework.security:spring-security-jwt:$springSecurityJwtVersion")
+
+    annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("com.amazonaws:aws-java-sdk-s3:$awsVersion")
 }
 
 apply(from = "detekt.gradle")
@@ -123,10 +128,16 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Test> {
-   useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.MappedSuperclass")
+}
+
+flyway {
+    url = "jdbc:postgresql://localhost:5432/core_service"
+    user = "postgres"
+    password = "12345678"
 }

@@ -14,6 +14,7 @@ import io.kotest.spring.SpringListener
 import io.mockk.every
 import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.Instant
 import java.util.Optional
 
 class EventServiceUT : AbstractTestClass() {
@@ -31,6 +32,7 @@ class EventServiceUT : AbstractTestClass() {
 
     init {
         val userId: Long = 0
+        val date: Instant = Instant.now()
 
         var user = User(
             "user",
@@ -43,6 +45,7 @@ class EventServiceUT : AbstractTestClass() {
         var eventRequest = EventDto(
             "name",
             "desc",
+            date,
             "link",
             null,
             null,
@@ -50,7 +53,7 @@ class EventServiceUT : AbstractTestClass() {
             userId
         )
 
-        var event = Event("name", "desc", "link", user)
+        var event = Event("name", "desc", date, "link", user)
 
         "test UserNotFoundException when adding new event" - {
 

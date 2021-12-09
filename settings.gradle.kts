@@ -6,6 +6,7 @@ pluginManagement {
     val allOpenVersion: String by settings
     val detektVersion: String by settings
     val kaptVersion: String by settings
+    val flywaydbVersion: String by settings
 
     plugins {
         id("org.springframework.boot") version springBootVersion
@@ -16,6 +17,7 @@ pluginManagement {
         kotlin("plugin.allopen") version allOpenVersion
         id("io.gitlab.arturbosch.detekt") version detektVersion
         kotlin("kapt") version kaptVersion
+        id("org.flywaydb.flyway") version flywaydbVersion
      }
 }
 

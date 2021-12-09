@@ -45,6 +45,7 @@ class EventControllerIT(
         var eventRequest = EventDto(
             randomAlphabetic(20),
             randomAlphabetic(40),
+            Instant.now(),
             randomAlphabetic(25),
             null,
             null,
@@ -83,6 +84,7 @@ class EventControllerIT(
             Event(
                 randomAlphabetic(text_value_length),
                 randomAlphabetic(text_value_length),
+                Instant.now(),
                 randomAlphabetic(text_value_length),
                 user
             )

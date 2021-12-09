@@ -26,6 +26,8 @@ data class Event(
 
     var description: String,
 
+    var date: Instant,
+
     var linkAva: String,
 
     // главная сторона owner
@@ -37,7 +39,7 @@ data class Event(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
 
-    // зависимая сторона
+    // зависимая сторона <--- нельзя через event repo добавить user
     @ManyToMany(mappedBy = "events", cascade = [CascadeType.ALL])
     var users: MutableList<User> = mutableListOf()
 
@@ -60,7 +62,7 @@ data class Event(
     var likeEvents: MutableList<LikeEvent> = mutableListOf()
 
     @CreatedDate
-    /*@Column(nullable = false)*/
+    @Column(nullable = false)
     var createdDt: Instant = Instant.now()
 
     @LastModifiedDate
