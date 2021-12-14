@@ -1,6 +1,8 @@
 package com.dataart.coreservice.controllers
 
 import com.dataart.coreservice.dto.EventDto
+import com.dataart.coreservice.dto.EventSliderDto
+import com.dataart.coreservice.dto.ListEventDto
 import com.dataart.coreservice.mappers.EventMapper
 import com.dataart.coreservice.services.EventService
 import org.slf4j.Logger
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/events")
-class EventController(private val eventService: EventService, private val eventMapper: EventMapper) {
+class EventController(
+    private val eventService: EventService,
+    private val eventMapper: EventMapper
+    ) {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -32,5 +37,14 @@ class EventController(private val eventService: EventService, private val eventM
         eventService.getById(this)
             .let { eventMapper.convertToEventDtoResponse(it) }
             .also { logger.info("getEvent response: {}", it.desc()) }
+    }
+
+    @GetMapping
+    fun getEvents(): ListEventDto {
+        logger.info("getEvents request: {}", this)
+        return eventService.getEvents()
+            .let{ eventMapper.convertToEventSliderDtoResponse(it) }
+            .let { ListEventDto(it) }
+            .also {logger.info("getEvents response {}", it)}
     }
 }

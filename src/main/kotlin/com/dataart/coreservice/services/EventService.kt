@@ -8,7 +8,9 @@ import com.dataart.coreservice.repository.EventRepository
 import com.dataart.coreservice.repository.UserRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 @Service
 class EventService(
@@ -17,7 +19,9 @@ class EventService(
     private val eventMapper: EventMapper
 ) {
 
+    private val getEventCount = 10
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
+    val pageable: Pageable = Pageable.ofSize(getEventCount)
 
     fun add(eventRequest: EventDto) =
         eventRequest
@@ -46,4 +50,11 @@ class EventService(
                 logger.info("service: event found {}", it.toString())
             }
     }
+
+    fun getEvents() = eventRepository
+        .findEventsByDateAfter(Instant.now(), pageable).toList()
+        .shuffled()
+        .also {
+            logger.debug("Service: events fount {}", it)
+        }
 }

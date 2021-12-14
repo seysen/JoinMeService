@@ -39,6 +39,7 @@ plugins {
     kotlin("plugin.allopen")
     id("io.gitlab.arturbosch.detekt")
     kotlin("kapt")
+    id("org.flywaydb.flyway")
 }
 
 group = groupName
@@ -57,7 +58,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // SpringBoot
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
@@ -68,7 +68,7 @@ dependencies {
     runtimeOnly("org.postgresql:$postgresqlVersion")
 
     // flyway
-    compileOnly("org.flywaydb:$flywaydbVersion")
+    implementation("org.flywaydb:flyway-core:$flywaydbVersion")
 
     // detekt
     detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
@@ -129,4 +129,10 @@ tasks.withType<Test> {
 allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.MappedSuperclass")
+}
+
+flyway {
+    url = "jdbc:postgresql://localhost:5432/core_service"
+    user = "postgres"
+    password = "12345678"
 }

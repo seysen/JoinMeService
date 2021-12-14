@@ -26,6 +26,8 @@ data class Event(
 
     var description: String,
 
+    var date: Instant,
+
     var linkAva: String,
 
     // главная сторона owner
@@ -60,7 +62,7 @@ data class Event(
     var likeEvents: MutableList<LikeEvent> = mutableListOf()
 
     @CreatedDate
-    /*@Column(nullable = false)*/
+    @Column(nullable = false)
     var createdDt: Instant = Instant.now()
 
     @LastModifiedDate
