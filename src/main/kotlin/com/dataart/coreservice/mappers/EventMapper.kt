@@ -1,6 +1,7 @@
 package com.dataart.coreservice.mappers
 
 import com.dataart.coreservice.dto.EventDto
+import com.dataart.coreservice.dto.EventSliderDto
 import com.dataart.coreservice.model.Event
 import com.dataart.coreservice.model.User
 import org.mapstruct.Mapper
@@ -26,8 +27,9 @@ interface EventMapper {
 
     // target  поле в сущносте- результате
 
-        @Mappings( // указать все поля которые есть в event dto + все из эвент
+    @Mappings( // указать все поля которые есть в event dto + все из эвент
         Mapping(target = "name", source = "eventDto.name"),
+        Mapping(target = "date", source = "eventDto.date"),
         Mapping(target = "linkAva", source = "eventDto.linkAva"),
         Mapping(target = "description", source = "eventDto.description"),
         Mapping(target = "creatorId", source = "user"),
@@ -38,6 +40,23 @@ interface EventMapper {
         Mapping(target = "likeEvents", ignore = true),
         Mapping(target = "messages", ignore = true),
         Mapping(target = "photos", ignore = true),
-        )
-        fun convertEventDtoRequestToEvent(eventDto: EventDto, user: User): Event
+    )
+
+    fun convertEventDtoRequestToEvent(eventDto: EventDto, user: User): Event
+
+    @Mappings(
+        Mapping(target = "id", ignore = false),
+        Mapping(
+            target = "users",
+            expression = "java(event.getUsers().size())"
+        ),
+        Mapping(
+            target = "likeEvents",
+            expression = "java(event.getLikeEvents().size())"
+    )
+    )
+
+    fun convertEventToEventSliderDto(event: Event): EventSliderDto
+
+    fun convertToEventSliderDtoResponse(events: List<Event>): MutableList<EventSliderDto>
 }

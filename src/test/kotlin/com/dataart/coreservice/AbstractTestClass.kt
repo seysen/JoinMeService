@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import org.flywaydb.core.Flyway
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.boot.web.server.LocalServerPort
@@ -38,6 +39,14 @@ abstract class AbstractTestClass : FreeSpec() {
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
             container.start()
+
+            val flyway = Flyway.configure()
+                .locations("db/migration/")
+                .schemas("public")
+                .dataSource(container.jdbcUrl, container.username, container.password)
+                .load()
+            flyway.baseline()
+            flyway.migrate()
 
             TestPropertyValues.of(
                 "spring.datasource.url=${container.jdbcUrl}",

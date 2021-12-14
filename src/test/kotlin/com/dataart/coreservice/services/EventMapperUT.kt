@@ -10,6 +10,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.Instant
 
 class EventMapperUT(@Autowired private val eventMapper: EventMapper) : AbstractTestClass() {
 
@@ -24,7 +25,7 @@ class EventMapperUT(@Autowired private val eventMapper: EventMapper) : AbstractT
     fun `Verify that Event Request is converted correctly to Event`() {
 
         var eventDtoRequest = EventDto(
-            "new event", "description", "link_ava",
+            "new event", "description", Instant.now(), "link_ava",
             null, null, null, userId
         )
 
@@ -50,7 +51,7 @@ class EventMapperUT(@Autowired private val eventMapper: EventMapper) : AbstractT
         var categoryNameSecond = "activity2"
 
         var event = Event(
-            "new event", "description", "link_ava",
+            "new event", "description", Instant.now(), "link_ava",
             user
         )
 

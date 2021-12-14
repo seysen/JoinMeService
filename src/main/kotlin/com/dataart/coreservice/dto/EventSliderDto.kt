@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class EventDto(
+class EventSliderDto(
+    val id: Long,
 
     var name: String,
 
@@ -16,16 +17,7 @@ data class EventDto(
     @JsonProperty("link_ava")
     var linkAva: String,
 
-    @JsonProperty("created_dt")
-    var createdDt: Instant? = null,
+    var users: Long,
 
-    @JsonProperty("updated_dt")
-    var updatedDt: Instant? = null,
-
-    @JsonProperty("category")
-    var categories: List<String>? = null,
-
-    @JsonProperty("creator_id")
-    var creatorId: Long? = null
-
+    var likeEvents: Long
 ) : BaseDto()
