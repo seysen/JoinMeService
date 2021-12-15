@@ -27,7 +27,7 @@ class EventController(
     fun add(@RequestBody eventRequest: EventDto) = with(eventRequest) {
         logger.info("addEvent request: {}", desc())
         eventService.add(this).also {
-        logger.info("addEvent response: {}", it)
+            logger.info("addEvent response: {}", it)
         }
     }
 
