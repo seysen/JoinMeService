@@ -3,6 +3,7 @@ package com.dataart.coreservice.controllers
 import com.dataart.coreservice.dto.EventDto
 import com.dataart.coreservice.dto.EventSliderDto
 import com.dataart.coreservice.dto.ListEventDto
+import com.dataart.coreservice.dto.UserJoinEventDto
 import com.dataart.coreservice.mappers.EventMapper
 import com.dataart.coreservice.services.EventService
 import org.slf4j.Logger
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class EventController(
     private val eventService: EventService,
     private val eventMapper: EventMapper
-    ) {
+) {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -43,8 +44,17 @@ class EventController(
     fun getEvents(): ListEventDto {
         logger.info("getEvents request: {}", this)
         return eventService.getEvents()
-            .let{ eventMapper.convertToEventSliderDtoResponse(it) }
+            .let { eventMapper.convertToEventSliderDtoResponse(it) }
             .let { ListEventDto(it) }
-            .also {logger.info("getEvents response {}", it)}
+            .also { logger.info("getEvents response {}", it) }
+    }
+
+    @PostMapping("/join")
+    fun join(@RequestBody userJoinEventDto: UserJoinEventDto) {
+        logger.info("joinEvent request: {}", userJoinEventDto.desc())
+        eventService.joinEvent(userJoinEventDto)
+        logger.info(
+            "joinEvent request {} successfully added", userJoinEventDto.desc()
+        ) // если вылетает ошибка в сервисе то сюда не возвращается выполнение
     }
 }
