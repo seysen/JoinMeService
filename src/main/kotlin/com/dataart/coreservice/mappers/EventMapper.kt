@@ -13,7 +13,7 @@ import org.mapstruct.ReportingPolicy
 interface EventMapper {
 
     @Mappings(
-        Mapping(target = "creatorId", ignore = true),
+        Mapping(target = "creatorId", source = "event.creatorId.id"),
         Mapping(
             target = "categories",
             expression = "java(event.getCategories().stream()" +
@@ -26,6 +26,8 @@ interface EventMapper {
     // и в имплементации генерит код return new String()
 
     // target  поле в сущносте- результате
+
+    fun convertToEventDtoResponse(eventsList: List<Event>): List<EventDto>
 
     @Mappings( // указать все поля которые есть в event dto + все из эвент
         Mapping(target = "name", source = "eventDto.name"),

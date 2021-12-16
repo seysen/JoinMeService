@@ -84,6 +84,16 @@ class EventService(
             }
     }
 
+    fun getAllByUserId(id: Long) = with(id) {
+        eventRepository.findAllByCreatorId(this)
+            .orElseThrow {
+                EventNotFoundException(this)
+                    .also { logger.error("Events haven't found", it) }
+            }.also {
+                logger.info("service: events for profile were found {}", it.toString())
+            }
+    }
+
     private fun ifUserExists(userId: Long) =
         userRepository
             .findById(userId)
