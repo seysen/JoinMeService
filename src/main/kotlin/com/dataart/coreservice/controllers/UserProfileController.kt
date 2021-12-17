@@ -13,7 +13,7 @@ import java.util.Arrays.toString
 
 @RestController
 @RequestMapping("/profile")
-class ProfileController(private val eventService: EventService, private val eventMapper: EventMapper) {
+class UserProfileController(private val eventService: EventService, private val eventMapper: EventMapper) {
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
