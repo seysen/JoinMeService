@@ -1,9 +1,12 @@
 package com.dataart.coreservice.services
 
+import com.dataart.coreservice.dto.ProfileDto
 import com.dataart.coreservice.dto.ResponseUserDto
 import com.dataart.coreservice.dto.UserDto
+import com.dataart.coreservice.exception.EventNotFoundException
 import com.dataart.coreservice.exception.FillingFieldsException
 import com.dataart.coreservice.exception.UserAlreadyExistException
+import com.dataart.coreservice.exception.UserNotFoundException
 import com.dataart.coreservice.exception.WrongLoginOrPasswordException
 import com.dataart.coreservice.mappers.UserMapper
 import com.dataart.coreservice.model.User
@@ -88,4 +91,21 @@ class UserService(
 
         return ResponseUserDto(userId, jwt)
     }
+
+    fun getUserById(id: Long): User {
+        val get = userRepository.findById(id)
+        if (get.isPresent) {
+            return get.get()
+        } else {
+            throw UserNotFoundException(id)
+        }
+    }
+//            .orElseThrow {
+//                EventNotFoundException(this)
+//                    .also { logger.error("Exception occurred", it) }
+//            }
+//                .also {
+//                logger.info("service: event found {}", it.toString())
+//            }
+//    }
 }
