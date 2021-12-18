@@ -13,7 +13,7 @@ import org.mapstruct.ReportingPolicy
 interface EventMapper {
 
     @Mappings(
-        Mapping(target = "creatorId", source = "event.creatorId.id"),
+        Mapping(target = "creatorId", ignore = true),
         Mapping(
             target = "categories",
             expression = "java(event.getCategories().stream()" +
