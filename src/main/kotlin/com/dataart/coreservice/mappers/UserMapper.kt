@@ -1,6 +1,5 @@
 package com.dataart.coreservice.mappers
 
-import com.dataart.coreservice.dto.ProfileDto
 import com.dataart.coreservice.dto.UserDto
 import com.dataart.coreservice.model.User
 import org.mapstruct.Mapper
@@ -19,10 +18,4 @@ interface UserMapper {
     Mapping(target = "linkAva", ignore = true),
     )
     fun toEntity(userDto: UserDto): User
-
-    @Mappings(
-        Mapping( target = "profileName", expression = "java(user.getName() + \" \" + user.getSurname())"),
-    )
-
-    fun toProfile(user: User): ProfileDto
 }

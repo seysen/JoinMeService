@@ -8,6 +8,10 @@ class ResponseUserDto(
     @JsonProperty("userid")
     var userId: String,
 
+    var name: String,
+
+    var surname: String,
+
     @JsonProperty("token")
     var token: String
 )

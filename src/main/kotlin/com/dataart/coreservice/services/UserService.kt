@@ -1,9 +1,7 @@
 package com.dataart.coreservice.services
 
-import com.dataart.coreservice.dto.ProfileDto
 import com.dataart.coreservice.dto.ResponseUserDto
 import com.dataart.coreservice.dto.UserDto
-import com.dataart.coreservice.exception.EventNotFoundException
 import com.dataart.coreservice.exception.FillingFieldsException
 import com.dataart.coreservice.exception.UserAlreadyExistException
 import com.dataart.coreservice.exception.UserNotFoundException
@@ -40,7 +38,7 @@ class UserService(
         logger.info("Saving user {}", body.desc())
         newUser = userRepository.save(newUser)
 
-        val response = createResponse(newUser.id.toString())
+        val response = createResponse(newUser.id.toString(), newUser.name, newUser.surname)
         logger.info("Successful registration. Response: {}", response)
         return response
     }
@@ -49,7 +47,7 @@ class UserService(
         logger.info("User is trying to authorize {}", body.desc())
         val user = userRepository.findByEmail(body.email)
         isLoginDtoCorrect(body, user)
-        val response = createResponse(user.get().id.toString())
+        val response = createResponse(user.get().id.toString(), user.get().name, user.get().surname)
         logger.info("Successful login. Response: {}", response)
         return response
     }
@@ -82,14 +80,14 @@ class UserService(
         }
     }
 
-    private fun createResponse(userId: String): ResponseUserDto {
+    private fun createResponse(userId: String, name: String, surname: String): ResponseUserDto {
         val jwt = Jwts.builder()
             .setIssuer(userId)
             .setExpiration(Date.from(LocalDate.now()
                 .plusDays(JWT_EXPIRATION_DAYS).atStartOfDay(ZoneId.systemDefault()).toInstant()))
             .signWith(SignatureAlgorithm.HS512, "secret").compact()
 
-        return ResponseUserDto(userId, jwt)
+        return ResponseUserDto(userId, name, surname, jwt)
     }
 
     fun getUserById(id: Long): User {
@@ -100,12 +98,4 @@ class UserService(
             throw UserNotFoundException(id)
         }
     }
-//            .orElseThrow {
-//                EventNotFoundException(this)
-//                    .also { logger.error("Exception occurred", it) }
-//            }
-//                .also {
-//                logger.info("service: event found {}", it.toString())
-//            }
-//    }
 }
