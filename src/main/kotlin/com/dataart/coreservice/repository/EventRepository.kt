@@ -12,6 +12,6 @@ import java.util.*
 interface EventRepository : CrudRepository<Event, Long> {
     fun findEventsByDateAfter(date: Instant, pageable: Pageable): Page<Event>
 
-    @Query(value = "from Event e where e.creatorId = :id")
-    fun findAllByCreatorId(@Param("id") id: Long): Optional<List<Event>>
+    @Query(nativeQuery = true, value = "select * from events join users_events on events.id = users_events.event_id where user_id = :id")
+    fun findAllByUserId(@Param("id") id: Long): List<Event>
 }

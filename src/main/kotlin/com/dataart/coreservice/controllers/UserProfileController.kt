@@ -17,12 +17,12 @@ class UserProfileController(private val eventService: EventService, private val 
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    @GetMapping("/{id}")
-    fun getAllEventsByUserId(@PathVariable id: Long): List<EventDto> {
-        logger.info("User' profile is going to be shown")
-        return eventService.getAllByUserId(id)
-            .let { eventMapper.convertToEventDtoResponse(it) }
-            .also{ logger.info("getAllEventsByUserId response {}", it.toString()) }
-    }
+//    @GetMapping("/{id}")
+//    fun getAllEventsByUserId(@PathVariable id: Long): List<EventDto> {
+//        logger.info("User' profile is going to be shown")
+//        return eventService.getAllByUserId(id)
+//            .let { eventMapper.convertToEventDtoResponse(it) }
+//            .also{ logger.info("getAllEventsByUserId response {}", it.toString()) }
+//    }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -56,5 +57,13 @@ class EventController(
         logger.info(
             "joinEvent request {} successfully added", userJoinEventDto.desc()
         ) // если вылетает ошибка в сервисе то сюда не возвращается выполнение
+    }
+
+    @GetMapping("/user")
+    fun getAllEventsByUserId(@RequestParam("id") id: Long): List<EventDto> {
+        logger.info("User's events is going to be shown")
+        return eventService.getAllByUserId(id)
+            .let { eventMapper.convertToEventDtoResponse(it) }
+            .also{ logger.info("getAllEventsByUserId response {}", it.toString()) }
     }
 }
